@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef, useCallback, CSSProperties, FC, ReactNode } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import type { CSSProperties, FC, ReactNode } from "react";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 
 // ── COLOR SYSTEM ──────────────────────────────────────────────────────────────
