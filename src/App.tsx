@@ -23,9 +23,17 @@ function useIsMobile() {
 
 // ── TYPES ─────────────────────────────────────────────────────────────────────
 type TechMap = Record<string, string[]>;
-interface Project { title: string; desc: string; tech: string[]; gh: string; demo: string; color: string; emoji: string; }
+interface Project { title: string; desc: string; tech: string[]; gh?: string; demo?: string; tag: string; color: string; emoji: string; }
 interface ExpItem  { role: string; co: string; period: string; desc: string; color: string; }
-interface Cert     { name: string; org: string; year: number; }
+
+// ── LINKS ─────────────────────────────────────────────────────────────────────
+const LINKS = {
+  github:   "https://github.com/Teddy-2004",
+  linkedin: "https://www.linkedin.com/in/tedla-tesfaye-9356a7390",
+  email:    "mailto:tedlatesfaye1@gmail.com",
+  emailAddr:"tedlatesfaye1@gmail.com",
+  resume:   "/Tedla_Godebo_CV.pdf",
+} as const;
 interface StatItem { val: number; suffix: string; label: string; }
 interface GlowBtnProps  { children: ReactNode; variant?: "primary"|"outline"|"ghost"; onClick?: ()=>void; href?: string; download?: string; }
 interface SectionProps  { id: string; children: ReactNode; style?: CSSProperties; }
@@ -292,7 +300,7 @@ const Hero: FC = () => {
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0,500], [0, mobile ? 60 : 150]);
   const opacity = useTransform(scrollY, [0,400], [1,0]);
-  const roles = ["Machine Learning Engineer","Deep Learning Researcher","MLOps Architect","AI Systems Builder","Computer Vision Expert"];
+  const roles = ["ML Engineering Student","Speech Recognition Builder","Whisper Fine-Tuner","Audio & Vision Deep Learning","MLOps Practitioner"];
   return (
     <motion.div style={{ y, opacity, position:"relative", zIndex:2, minHeight:"100vh", display:"flex", alignItems:"center", paddingTop: mobile ? 80 : 100 }}>
       <div style={{ maxWidth:1200, margin:"0 auto", padding: mobile ? "0 20px" : "0 40px", width:"100%" }}>
@@ -317,18 +325,18 @@ const Hero: FC = () => {
           </div>
           <motion.p initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:1.5 }}
             style={{ fontSize: mobile ? 14 : 16, lineHeight:1.8, color:"rgba(255,255,255,0.55)", maxWidth:560, marginBottom:32 }}>
-            Building intelligent systems, scalable machine learning solutions, and AI-powered experiences that bridge research and real-world impact.
+            Software Engineering student specialising in machine learning. I build speech recognition for under-resourced African languages and ship models end to end, from fine-tuning to Dockerised APIs.
           </motion.p>
           <motion.div initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ delay:1.7 }}
             style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
-            <GlowBtn href="#" download="Tedla_Tesfaye_Resume.pdf">⬇ Resume</GlowBtn>
+            <GlowBtn href={LINKS.resume} download="Tedla_Godebo_CV.pdf">⬇ Resume</GlowBtn>
             <GlowBtn variant="outline" onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior:"smooth" })}>Projects →</GlowBtn>
             <GlowBtn variant="ghost"   onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior:"smooth" })}>Contact</GlowBtn>
           </motion.div>
           <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:2 }}
             style={{ display:"flex", gap:16, marginTop:32, flexWrap:"wrap" }}>
-            {([ ["GitHub","https://github.com/yourusername"], ["LinkedIn","https://linkedin.com/in/yourusername"], ["Email","mailto:tedla@example.com"] ] as [string,string][]).map(([label,href]) => (
-              <motion.a key={label} href={href} data-hover whileHover={{ y:-3, color:C.cyan }}
+            {([ ["GitHub",LINKS.github], ["LinkedIn",LINKS.linkedin], ["Email",LINKS.email] ] as [string,string][]).map(([label,href]) => (
+              <motion.a key={label} href={href} target={label==="Email" ? undefined : "_blank"} rel="noreferrer" data-hover whileHover={{ y:-3, color:C.cyan }}
                 style={{ color:"rgba(255,255,255,0.4)", fontSize:13, textDecoration:"none", fontWeight:500, display:"flex", alignItems:"center", gap:6 }}>
                 <span style={{ width:6, height:6, borderRadius:"50%", background:C.blue, display:"inline-block", flexShrink:0 }} />{label}
               </motion.a>
@@ -360,12 +368,12 @@ const CountUp: FC<CountUpProps> = ({ end, suffix }) => {
 
 const AIStats: FC = () => {
   const stats: StatItem[] = [
-    { val:50, suffix:"+",  label:"ML Models"   },
-    { val:10, suffix:"M+", label:"Data Points" },
-    { val:98, suffix:"%",  label:"Best Accuracy"},
-    { val:7,  suffix:"",   label:"Projects"    },
-    { val:15, suffix:"+",  label:"Papers"      },
-    { val:3,  suffix:"+",  label:"Years"       },
+    { val:10, suffix:"",   label:"Featured projects"          },
+    { val:4,  suffix:"",   label:"African languages in ASR work" },
+    { val:14, suffix:"k",  label:"Wolaita speech clips curated" },
+    { val:93, suffix:"%",  label:"Best audio CNN accuracy"    },
+    { val:2,  suffix:"",   label:"Degrees in progress"        },
+    { val:3,  suffix:"",   label:"Countries: RW · IT · MT"    },
   ];
   return (
     <div style={{ position:"relative", zIndex:2, padding:"56px 20px", background:"linear-gradient(135deg, rgba(14,165,233,0.05), rgba(168,85,247,0.05))", borderTop:"1px solid rgba(14,165,233,0.1)", borderBottom:"1px solid rgba(168,85,247,0.1)" }}>
@@ -384,7 +392,7 @@ const AIStats: FC = () => {
 // ── ABOUT ─────────────────────────────────────────────────────────────────────
 const About: FC = () => {
   const mobile = useIsMobile();
-  const stats = [{ n:"50+", l:"ML Projects" },{ n:"3+", l:"Years Exp" },{ n:"15+", l:"Technologies" },{ n:"∞", l:"Curiosity" }];
+  const stats = [{ n:"4.5/5", l:"GPA at ALU" },{ n:"2", l:"Degrees in progress" },{ n:"4", l:"Languages in ASR work" },{ n:"∞", l:"Curiosity" }];
   return (
     <Section id="about">
       <SectionLabel label="About Me" />
@@ -395,13 +403,13 @@ const About: FC = () => {
             <span style={{ background:`linear-gradient(135deg, ${C.cyan}, ${C.purple})`, WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>& Reality</span>
           </h2>
           <p style={{ color:"rgba(255,255,255,0.6)", lineHeight:1.85, fontSize:14, marginBottom:14 }}>
-            I'm a Machine Learning Engineer with a deep passion for building production-ready AI systems that solve real-world problems at scale. My work spans deep learning, computer vision, NLP, recommendation systems, and predictive analytics.
+            I'm a third-year BSc Software Engineering student at the African Leadership University in Kigali, specialising in machine learning, and I'm also studying Digital Economics and Business at Università Politecnica delle Marche in Ancona.
           </p>
           <p style={{ color:"rgba(255,255,255,0.6)", lineHeight:1.85, fontSize:14, marginBottom:14 }}>
-            With a foundation in software engineering and frontend development, I bring a full-stack perspective to AI: from exploratory data science and model development to cloud deployment, MLOps automation, and scalable infrastructure.
+            My focus is automatic speech recognition for languages that big models leave behind. I'm fine-tuning Whisper for Shona, Lingala and Luganda in Google's WAXAL challenge, and preparing a research paper on ASR for Wolaita, my native language.
           </p>
           <p style={{ color:"rgba(255,255,255,0.6)", lineHeight:1.85, fontSize:14 }}>
-            I approach every project with a research mindset — reading papers, experimenting relentlessly, and engineering systems that are not just accurate, but robust, interpretable, and maintainable.
+            I like taking a model all the way to something people can use: training on limited GPUs, serving it with FastAPI and Docker, and load-testing it. I'm looking for ML internships, part-time remote work, and roles from mid-2027.
           </p>
         </div>
         <div>
@@ -416,7 +424,7 @@ const About: FC = () => {
           </div>
           <div style={{ padding:mobile ? 16 : 22, borderRadius:14, background:`linear-gradient(135deg, rgba(124,58,237,0.15), rgba(14,165,233,0.15))`, border:"1px solid rgba(168,85,247,0.2)" }}>
             <div className="mono" style={{ fontSize:11, color:C.purple, marginBottom:10 }}>// research_interests</div>
-            {["Deep Learning & Neural Architecture Search","Computer Vision & Multimodal AI","Large Language Models & RAG Systems","MLOps & Production AI Systems","Reinforcement Learning"].map(r => (
+            {["Speech recognition for under-resourced languages","Fine-tuning foundation models (Whisper) on limited compute","Audio and computer vision deep learning","African-language NLP and data curation","MLOps: shipping models as reliable services"].map(r => (
               <div key={r} style={{ display:"flex", alignItems:"flex-start", gap:8, marginBottom:8, color:"rgba(255,255,255,0.7)", fontSize:13, lineHeight:1.5 }}>
                 <span style={{ color:C.cyan, flexShrink:0, marginTop:1 }}>▹</span>{r}
               </div>
@@ -430,14 +438,14 @@ const About: FC = () => {
 
 // ── SKILLS ────────────────────────────────────────────────────────────────────
 const TECH: TechMap = {
-  "Languages":    ["Python","SQL","JavaScript","TypeScript","C++","Bash"],
-  "ML / DL":      ["PyTorch","TensorFlow","Scikit-learn","Keras","XGBoost","LightGBM","Hugging Face","OpenCV","spaCy","NLTK"],
-  "Data Science": ["Pandas","NumPy","Matplotlib","Plotly","Seaborn","Jupyter","Apache Spark"],
-  "MLOps":        ["Docker","Kubernetes","MLflow","FastAPI","Flask","Streamlit","Airflow","CI/CD"],
-  "Cloud":        ["AWS","Google Cloud","Azure","Firebase","Linux","GitHub Actions"],
-  "Databases":    ["PostgreSQL","MongoDB","MySQL","Redis"],
-  "Frontend":     ["React","Next.js","Node.js","Tailwind CSS"],
-  "Tools":        ["Git","GitHub","VS Code","Postman","Figma"],
+  "Languages":    ["Python","TypeScript","SQL","Dart","JavaScript","Bash"],
+  "ML / DL":      ["PyTorch","TensorFlow","Keras","Scikit-learn","XGBoost","Hugging Face Transformers","Whisper","faster-whisper"],
+  "Data Science": ["Pandas","NumPy","Matplotlib","Jupyter"],
+  "MLOps":        ["Docker","nginx","FastAPI","Streamlit","Locust"],
+  "Platforms":    ["Google Colab","Kaggle","Render","Railway","Vercel","Supabase","Firebase","Linux"],
+  "Databases":    ["MySQL","MongoDB","SQLite","Supabase"],
+  "App Dev":      ["React","Flutter","VS Code Extensions"],
+  "Tools":        ["Git","GitHub","VS Code","Anthropic API"],
 };
 
 const Skills: FC = () => {
@@ -480,13 +488,36 @@ const Skills: FC = () => {
 
 // ── PROJECTS ──────────────────────────────────────────────────────────────────
 const PROJECTS: Project[] = [
-  { title:"World Cup Prediction",        desc:"An end-to-end machine learning system that predicts World Cup 2026 match outcomes using a stacked ensemble of Poisson, XGBoost, and neural network models trained on 139 engineered features — from team form and ELO ratings to venue altitude and travel fatigue — served through a live API and dashboard.",  tech:["Python","FastAPI","scikit-learn","Pandas","XGBoost", "PyTorch", "SciPy", "SQLite", "Docker", "Railway"],       gh:"https://github.com/Teddy-2004/world-cup_predictor.git",      demo:"https://wc2026-predictor-production-714b.up.railway.app/", color:C.blue,   emoji:"📈" },
-  { title:"Intelligent Recommendation Engine", desc:"Scalable recommendation system using collaborative filtering, matrix factorization, and deep learning ranking models via FastAPI.",   tech:["PyTorch","FastAPI","PostgreSQL","Redis"],                gh:"https://github.com/yourusername/recommendation-engine", demo:"https://your-demo-link.com", color:C.purple, emoji:"🎯" },
-  { title:"Real-Time Object Detection",        desc:"Computer vision system detecting and tracking objects in real-time using YOLOv8 and OpenCV, achieving 60 FPS on edge hardware.",      tech:["YOLOv8","OpenCV","Python","CUDA"],                       gh:"https://github.com/yourusername/object-detection",      demo:"https://your-demo-link.com", color:C.cyan,   emoji:"👁️" },
-  { title:"NLP Resume Screening AI",           desc:"Transformer-based NLP system ranking resumes via semantic similarity and fine-tuned BERT embeddings with explainable scoring.",       tech:["Transformers","Hugging Face","FastAPI","spaCy"],         gh:"https://github.com/yourusername/resume-screening-ai",   demo:"https://your-demo-link.com", color:C.pink,   emoji:"📄" },
-  { title:"RAG Chatbot Architecture",          desc:"Production-grade AI chatbot using Retrieval-Augmented Generation, Pinecone vector database, and OpenAI GPT pipelines.",               tech:["LangChain","Pinecone","OpenAI API","FastAPI"],           gh:"https://github.com/yourusername/rag-chatbot",           demo:"https://your-demo-link.com", color:C.violet, emoji:"🤖" },
-  { title:"Predictive Analytics Dashboard",    desc:"Enterprise analytics platform for forecasting trends, anomaly detection, and automated insight generation with Plotly visuals.",      tech:["Python","Plotly","Streamlit","Pandas"],                  gh:"https://github.com/yourusername/predictive-dashboard",  demo:"https://your-demo-link.com", color:C.blue,   emoji:"📊" },
-  { title:"MLOps Pipeline Platform",           desc:"Full ML lifecycle platform with automated training, deployment, A/B testing, monitoring, and CI/CD automation on Kubernetes + AWS.",  tech:["Docker","Kubernetes","MLflow","AWS","Airflow"],          gh:"https://github.com/yourusername/mlops-platform",        demo:"https://your-demo-link.com", color:C.purple, emoji:"⚙️" },
+  { title:"Google WAXAL ASR Challenge", tag:"Speech · Ongoing",
+    desc:"Fine-tuning OpenAI's Whisper for Shona, Lingala and Luganda speech recognition in a $10,000-prize Zindi competition. Ran full-data whisper-small training on free T4 GPUs across Colab and Kaggle, working through VRAM limits, dtype mismatches and out-of-memory failures.",
+    tech:["PyTorch","Whisper","Hugging Face Transformers","Colab","Kaggle"], color:C.cyan, emoji:"🎙️" },
+  { title:"Whisper ASR for Wolaita", tag:"Speech · Research paper in progress",
+    desc:"Adapting Whisper to Wolaita (Wolaytta), an under-resourced Ethiopian Omotic language and my native language. Built the data plan around a 14.2k-clip, 109-speaker Hugging Face corpus, prior AAU research, and radio, TV and Bible.is audio.",
+    tech:["Whisper","Hugging Face Datasets","PyTorch","Data curation"], color:C.purple, emoji:"🗣️" },
+  { title:"Acoustic Anomaly Detection (MLOps)", tag:"Audio · MLOps",
+    desc:"End-to-end pipeline on the MIMII industrial pump audio dataset: CNN classifier reaching 93.6% accuracy, FastAPI backend, Streamlit UI, and Docker deployment behind nginx, load-tested with Locust across 1, 3 and 5 containers.",
+    tech:["TensorFlow/Keras","FastAPI","Streamlit","Docker","nginx","Locust"], gh:"https://github.com/Teddy-2004/water-pump_acoustic", color:C.blue, emoji:"🔊" },
+  { title:"Lecture Chapter Mapper", tag:"Speech · LLM tool",
+    desc:"Transcribes lecture recordings with faster-whisper and uses the Claude API to build a clickable HTML chapter map, tagging each segment as essential, useful or skippable.",
+    tech:["faster-whisper","Anthropic API","Python","HTML"], color:C.pink, emoji:"🎓" },
+  { title:"World Cup 2026 Predictor", tag:"Tabular ML · Live demo",
+    desc:"Predicts World Cup 2026 match outcomes with a stacked ensemble of Poisson, XGBoost and neural network models on 139 engineered features, from team form and ELO ratings to venue altitude and travel fatigue, served through a live API and dashboard.",
+    tech:["XGBoost","PyTorch","scikit-learn","FastAPI","SQLite","Docker","Railway"], gh:"https://github.com/Teddy-2004/world-cup_predictor", demo:"https://wc2026-predictor-production-714b.up.railway.app/", color:C.violet, emoji:"⚽" },
+  { title:"Malaria Cell Image Classification", tag:"Vision · Group lead",
+    desc:"Led a team comparing Baseline, VGG16, ResNet50 and InceptionV3 CNNs on the NIH malaria cell dataset. My partially fine-tuned ResNet50 reached F1 0.777 and AUC 0.871; I also debugged a teammate's InceptionV3 pipeline and co-wrote the report.",
+    tech:["TensorFlow/Keras","ResNet50","VGG16","InceptionV3"], color:C.cyan, emoji:"🔬" },
+  { title:"Africa Infrastructure Cost Predictor", tag:"Regression · API",
+    desc:"Regression model on 4,658 World Bank African infrastructure projects (1970s–2019) explaining about 92% of cost variance (R² 0.923), deployed as a documented FastAPI REST endpoint for real-time predictions.",
+    tech:["scikit-learn","Pandas","FastAPI"], color:C.blue, emoji:"🏗️" },
+  { title:"Water Pump Functionality Prediction", tag:"Tabular ML",
+    desc:"Full ML pipeline on the DrivenData / Taarifa Tanzania dataset predicting whether water pumps are functional, with a tuned Random Forest (test macro-F1 0.701) and an IEEE-style report.",
+    tech:["scikit-learn","Random Forest","Pandas"], gh:"https://github.com/Teddy-2004/water-pump_project", color:C.purple, emoji:"💧" },
+  { title:"DataBric", tag:"Mobile · In progress",
+    desc:"Peer-to-peer mobile data sharing app: a Flutter Android client with a FastAPI backend, Supabase database and relay infrastructure, currently being tested in Europe.",
+    tech:["Flutter","FastAPI","Supabase","Render"], gh:"https://github.com/Teddy-2004/DataBric", color:C.pink, emoji:"📶" },
+  { title:"Auto Commit Agent", tag:"Developer tool",
+    desc:"VS Code extension in TypeScript that reads your staged changes and uses the Anthropic API to write contextual git commit messages.",
+    tech:["TypeScript","VS Code API","Anthropic API"], color:C.violet, emoji:"🤖" },
 ];
 
 const ProjectCard: FC<ProjectCardProps> = ({ p, i }) => {
@@ -504,12 +535,17 @@ const ProjectCard: FC<ProjectCardProps> = ({ p, i }) => {
           {p.emoji}
         </div>
         <div style={{ display:"flex", gap:6 }}>
-          <motion.a href={p.gh} target="_blank" rel="noreferrer" whileHover={{ scale:1.1 }}
-            style={{ fontSize:11, color:"rgba(255,255,255,0.4)", textDecoration:"none", padding:"4px 10px", borderRadius:20, border:"1px solid rgba(255,255,255,0.1)", fontWeight:500 }}>GH</motion.a>
-          <motion.a href={p.demo} target="_blank" rel="noreferrer" whileHover={{ scale:1.1 }}
-            style={{ fontSize:11, color:"rgba(255,255,255,0.4)", textDecoration:"none", padding:"4px 10px", borderRadius:20, border:"1px solid rgba(255,255,255,0.1)", fontWeight:500 }}>↗</motion.a>
+          {p.gh && (
+            <motion.a href={p.gh} target="_blank" rel="noreferrer" whileHover={{ scale:1.1 }} aria-label={`${p.title} on GitHub`}
+              style={{ fontSize:11, color:"rgba(255,255,255,0.4)", textDecoration:"none", padding:"4px 10px", borderRadius:20, border:"1px solid rgba(255,255,255,0.1)", fontWeight:500 }}>GitHub</motion.a>
+          )}
+          {p.demo && (
+            <motion.a href={p.demo} target="_blank" rel="noreferrer" whileHover={{ scale:1.1 }} aria-label={`${p.title} live demo`}
+              style={{ fontSize:11, color:"rgba(255,255,255,0.4)", textDecoration:"none", padding:"4px 10px", borderRadius:20, border:"1px solid rgba(255,255,255,0.1)", fontWeight:500 }}>Demo ↗</motion.a>
+          )}
         </div>
       </div>
+      <div className="mono" style={{ fontSize:10, color:p.color, letterSpacing:1, marginBottom:6 }}>{p.tag}</div>
       <h3 style={{ fontSize:15, fontWeight:700, marginBottom:7, color:"#fff", lineHeight:1.3 }}>{p.title}</h3>
       <p style={{ fontSize:13, color:"rgba(255,255,255,0.5)", lineHeight:1.65, marginBottom:14 }}>{p.desc}</p>
       <div style={{ display:"flex", flexWrap:"wrap", gap:5 }}>
@@ -527,10 +563,10 @@ const Projects: FC = () => {
     <Section id="projects">
       <SectionLabel label="Projects" />
       <h2 style={{ fontSize: mobile ? 26 : 40, fontWeight:800, marginBottom:10 }}>
-        Flagship{" "}
-        <span style={{ background:`linear-gradient(135deg, ${C.cyan}, ${C.purple})`, WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>AI Systems</span>
+        Selected{" "}
+        <span style={{ background:`linear-gradient(135deg, ${C.cyan}, ${C.purple})`, WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Work</span>
       </h2>
-      <p style={{ color:"rgba(255,255,255,0.4)", fontSize:13, marginBottom: mobile ? 28 : 48 }}>Production-grade systems built with research-first thinking.</p>
+      <p style={{ color:"rgba(255,255,255,0.4)", fontSize:13, marginBottom: mobile ? 28 : 48 }}>Speech recognition first, then the audio, vision and tabular ML projects behind it.</p>
       <div style={{ display:"grid", gridTemplateColumns: mobile ? "1fr" : "repeat(auto-fit, minmax(300px, 1fr))", gap:14 }}>
         {PROJECTS.map((p,i) => <ProjectCard key={p.title} p={p} i={i} />)}
       </div>
@@ -540,9 +576,10 @@ const Projects: FC = () => {
 
 // ── EXPERIENCE ────────────────────────────────────────────────────────────────
 const EXP: ExpItem[] = [
-  { role:"Machine Learning Engineer", co:"AI Research Lab",  period:"2023 – Present", desc:"Designed and deployed scalable ML pipelines processing millions of records daily. Built transformer-based NLP models and computer vision systems. Led MLOps initiatives on AWS with Kubernetes orchestration.", color:C.blue },
-  { role:"Data Scientist",            co:"Tech Startup",     period:"2022 – 2023",    desc:"Developed predictive analytics models for customer behavior and churn prediction. Built real-time recommendation engine serving 100k+ users with sub-100ms latency.", color:C.purple },
-  { role:"Software Engineer",         co:"Software Company", period:"2021 – 2022",    desc:"Built data-driven web applications and APIs. Introduced ML-driven features to improve user engagement. Developed React dashboards for business intelligence.", color:C.cyan },
+  { role:"Freelance Coding & Data Science Tutor", co:"Malta-based clients", period:"Ongoing", desc:"Design and teach programming and data science courses, including a three-session “Python for Data Basics” course on Pandas, data cleaning, EDA and Matplotlib, with complete teaching notebooks, exercises and solutions.", color:C.blue },
+  { role:"Expansion Coordinator", co:"YeneHealth", period:"Sep 2024 – Apr 2025", desc:"Coordinated two cross-functional intern teams in Marketing and Operations, led planning for social media campaigns and partnership outreach, and wrote the handover report used to onboard future interns.", color:C.purple },
+  { role:"Tilting Futures Scholar", co:"CEMACS, Universiti Sains Malaysia · Penang", period:"Semester placement", desc:"Combined academic study with an applied internship at the Centre for Marine and Coastal Ecosystems: data cleaning, analysis and visualisation for conservation work including International Coastal Cleanup Day.", color:C.cyan },
+  { role:"BSc Software Engineering (Machine Learning)", co:"African Leadership University · Kigali", period:"May 2024 – May 2027", desc:"Machine learning specialisation, GPA 4.5 / 5.0. Concurrently studying BSc Digital Economics and Business at Università Politecnica delle Marche, Ancona (2025 – present).", color:C.pink },
 ];
 
 const Experience: FC = () => {
@@ -551,8 +588,8 @@ const Experience: FC = () => {
     <Section id="experience">
       <SectionLabel label="Experience" />
       <h2 style={{ fontSize: mobile ? 26 : 40, fontWeight:800, marginBottom: mobile ? 28 : 52 }}>
-        Career{" "}
-        <span style={{ background:`linear-gradient(135deg, ${C.cyan}, ${C.purple})`, WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Timeline</span>
+        Experience &{" "}
+        <span style={{ background:`linear-gradient(135deg, ${C.cyan}, ${C.purple})`, WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Education</span>
       </h2>
       <div style={{ position:"relative" }}>
         <div style={{ position:"absolute", left:14, top:0, bottom:0, width:1, background:`linear-gradient(180deg, ${C.blue}, ${C.purple}, transparent)` }} />
@@ -571,45 +608,18 @@ const Experience: FC = () => {
   );
 };
 
-// ── CERTIFICATIONS ────────────────────────────────────────────────────────────
-const CERTS: Cert[] = [
-  { name:"TensorFlow Developer Certificate", org:"Google",                     year:2023 },
-  { name:"AWS Machine Learning Specialty",   org:"Amazon Web Services",        year:2023 },
-  { name:"Deep Learning Specialization",     org:"Coursera / DeepLearning.AI", year:2022 },
-  { name:"Professional ML Engineer",         org:"Google Cloud",               year:2022 },
-  { name:"MLOps Specialization",             org:"Coursera / DeepLearning.AI", year:2023 },
-];
-
-const Certifications: FC = () => {
-  const mobile = useIsMobile();
-  return (
-    <Section id="certifications">
-      <SectionLabel label="Certifications" />
-      <h2 style={{ fontSize: mobile ? 26 : 40, fontWeight:800, marginBottom: mobile ? 20 : 36 }}>
-        Credentials &{" "}
-        <span style={{ background:`linear-gradient(135deg, ${C.cyan}, ${C.purple})`, WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Recognition</span>
-      </h2>
-      <div style={{ display:"grid", gridTemplateColumns: mobile ? "1fr" : "repeat(auto-fit, minmax(240px, 1fr))", gap:12 }}>
-        {CERTS.map((c,i) => (
-          <motion.div key={c.name} initial={{ opacity:0, y:16 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ delay:i*0.08 }}
-            whileHover={{ scale:1.02 }}
-            style={{ padding:"16px 18px", borderRadius:14, border:"1px solid rgba(14,165,233,0.15)", background:"rgba(14,165,233,0.03)" }}>
-            <div className="mono" style={{ fontSize:10, color:C.blue, marginBottom:6, letterSpacing:2 }}>{c.year}</div>
-            <div style={{ fontSize:13, fontWeight:700, marginBottom:4, lineHeight:1.4 }}>{c.name}</div>
-            <div style={{ fontSize:11, color:"rgba(255,255,255,0.4)" }}>{c.org}</div>
-          </motion.div>
-        ))}
-      </div>
-    </Section>
-  );
-};
-
 // ── CONTACT ───────────────────────────────────────────────────────────────────
 const Contact: FC = () => {
   const mobile = useIsMobile();
   const [form, setForm] = useState({ name:"", email:"", msg:"" });
   const [sent, setSent] = useState(false);
-  const submit = (e: React.FormEvent) => { e.preventDefault(); setSent(true); setTimeout(()=>setSent(false),3000); setForm({ name:"", email:"", msg:"" }); };
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const subject = encodeURIComponent(`Portfolio contact from ${form.name}`);
+    const body = encodeURIComponent(`${form.msg}\n\n— ${form.name} (${form.email})`);
+    window.location.href = `${LINKS.email}?subject=${subject}&body=${body}`;
+    setSent(true); setTimeout(()=>setSent(false),3000);
+  };
   const inputStyle: CSSProperties = { width:"100%", padding:"13px 16px", borderRadius:12, background:"rgba(255,255,255,0.04)", border:"1px solid rgba(14,165,233,0.2)", color:"#fff", fontSize:14, fontFamily:"'Syne',sans-serif", outline:"none", transition:"border-color 0.3s, box-shadow 0.3s" };
   return (
     <Section id="contact">
@@ -621,10 +631,11 @@ const Contact: FC = () => {
             <span style={{ background:`linear-gradient(135deg, ${C.cyan}, ${C.purple})`, WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Something</span>
           </h2>
           <p style={{ color:"rgba(255,255,255,0.5)", fontSize:14, lineHeight:1.8, marginBottom:24 }}>
-            Open to full-time ML engineering roles, AI research collaborations, and exciting projects at the frontier of intelligence.
+            Open to ML and speech internships, part-time remote work, research collaborations, and full-time roles from mid-2027. Based between Ancona, Italy and Kigali, Rwanda.
           </p>
-          {["✉  tedla@example.com","🔗  linkedin.com/in/yourusername","⌨  github.com/yourusername"].map(line => (
-            <div key={line} style={{ color:"rgba(255,255,255,0.6)", fontSize:13, marginBottom:12 }}>{line}</div>
+          {([["✉  "+LINKS.emailAddr, LINKS.email],["🔗  linkedin.com/in/tedla-tesfaye-9356a7390", LINKS.linkedin],["⌨  github.com/Teddy-2004", LINKS.github]] as [string,string][]).map(([line,href]) => (
+            <a key={line} href={href} target={href.startsWith("mailto") ? undefined : "_blank"} rel="noreferrer" data-hover
+              style={{ display:"block", color:"rgba(255,255,255,0.6)", fontSize:13, marginBottom:12, textDecoration:"none", wordBreak:"break-word" }}>{line}</a>
           ))}
         </div>
         <form onSubmit={submit} style={{ display:"flex", flexDirection:"column", gap:12 }}>
@@ -636,7 +647,7 @@ const Contact: FC = () => {
             onChange={e => setForm(f=>({...f,msg:e.target.value}))} required style={{ ...inputStyle, resize:"vertical" }} />
           <motion.button type="submit" data-hover whileHover={{ scale:1.02 }} whileTap={{ scale:0.97 }}
             style={{ padding:"14px 28px", borderRadius:40, background:`linear-gradient(135deg, ${C.violet}, ${C.blue})`, border:"none", color:"#fff", fontSize:14, fontFamily:"'Syne',sans-serif", fontWeight:600, cursor:"pointer" }}>
-            {sent ? "✓ Message Sent!" : "Send Message →"}
+            {sent ? "✓ Opening your email app…" : "Send Message →"}
           </motion.button>
         </form>
       </div>
@@ -650,10 +661,10 @@ const Footer: FC = () => {
   return (
     <footer style={{ position:"relative", zIndex:2, borderTop:"1px solid rgba(14,165,233,0.1)", padding: mobile ? "24px 20px" : "32px 40px",
       display:"flex", flexDirection: mobile ? "column" : "row", justifyContent:"space-between", alignItems:"center", gap:14, textAlign:"center" }}>
-      <div className="mono" style={{ color:"rgba(255,255,255,0.3)", fontSize:11 }}>© 2024 Tedla Tesfaye Godebo — Built with intelligence</div>
+      <div className="mono" style={{ color:"rgba(255,255,255,0.3)", fontSize:11 }}>© {new Date().getFullYear()} Tedla Tesfaye Godebo</div>
       <div style={{ display:"flex", gap:20 }}>
-        {(["GitHub","LinkedIn","Email"] as const).map(s => (
-          <motion.a key={s} href="#" data-hover whileHover={{ color:C.cyan, y:-2 }}
+        {([["GitHub",LINKS.github],["LinkedIn",LINKS.linkedin],["Email",LINKS.email]] as const).map(([s,href]) => (
+          <motion.a key={s} href={href} target={s==="Email" ? undefined : "_blank"} rel="noreferrer" data-hover whileHover={{ color:C.cyan, y:-2 }}
             style={{ color:"rgba(255,255,255,0.3)", fontSize:12, textDecoration:"none", fontWeight:500 }}>{s}</motion.a>
         ))}
       </div>
@@ -683,7 +694,6 @@ export default function App() {
             <Skills />
             <Projects />
             <Experience />
-            <Certifications />
             <Contact />
           </main>
           <Footer />
