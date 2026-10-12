@@ -30,8 +30,8 @@ interface ExpItem  { role: string; co: string; period: string; desc: string; col
 const LINKS = {
   github:   "https://github.com/Teddy-2004",
   linkedin: "https://www.linkedin.com/in/tedla-tesfaye-9356a7390",
-  email:    "mailto:tedlatesfaye1@gmail.com",
-  emailAddr:"tedlatesfaye1@gmail.com",
+  email:    "mailto:tedlatesfaye825@gmail.com",
+  emailAddr:"tedlatesfaye825@gmail.com",
   resume:   "/Tedla_Godebo_CV.pdf",
 } as const;
 interface StatItem { val: number; suffix: string; label: string; }
